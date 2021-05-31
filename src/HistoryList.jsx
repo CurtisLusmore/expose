@@ -6,6 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 function CheckInEntry({ timestamp, name, location }) {
   function timeString(timestamp) {
-    return new Date(timestamp).toLocaleTimeString();
+    return moment(timestamp).format('hh:mmA');
   }
 
   function locationLink(name, { latitude, longitude }) {
@@ -32,7 +33,7 @@ function CheckInEntry({ timestamp, name, location }) {
 
 export default function HistoryList({ history }) {
   const days = history.reduce(([prev, ...tail], curr) => {
-    const date = new Date(curr.timestamp).toLocaleDateString();
+    const date = moment(curr.timestamp).format('DD/MM/YYYY');
     return prev === undefined
       ? [{ date, items: [curr] }]
       : prev.date !== date
