@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import CheckInForm from './CheckInForm';
+import HistoryList from './HistoryList';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: '90%',
+    margin: '10px auto 10px auto',
+  },
+}));
 
 function App() {
+  const initialStateString = window.localStorage.getItem('items');
+  const initialState = initialStateString
+    ? JSON.parse(initialStateString)
+    : [];
+
+  const [state, _setState] = React.useState(initialState);
+
+  function setState(newState) {
+    if (typeof(newState) === 'function') {
+      newState = newState(state);
+    }
+    window.localStorage.setItem('items', JSON.stringify(newState));
+    _setState(newState);
+  }
+
+  function addLocation(name) {
+    const timestamp = new Date().getTime();
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: location }) => setState(state => [ ...state, { timestamp, name, location } ]),
+      () => {},
+      { maximumAge: 0, enableHighAccuracy: true }
+    );
+  };
+
+  const classes = useStyles();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.root}>
+      <CheckInForm addLocation={addLocation} />
+      <HistoryList history={state} />
     </div>
   );
 }
