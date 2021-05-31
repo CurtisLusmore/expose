@@ -26,10 +26,20 @@ function App() {
     _setState(newState);
   }
 
-  function addLocation(name) {
+  function addLocation(name, mode) {
     const timestamp = new Date().getTime();
     navigator.geolocation.getCurrentPosition(
-      ({ coords: location }) => setState(state => [ ...state, { timestamp, name, location } ]),
+      ({ coords }) => {
+        const location = { latitude: coords.latitude, longitude: coords.longitude };
+        switch (mode) {
+          case 'checkin':
+            setState(state => [ { name, timestamps: [timestamp], locations: [location] }, ...state ]);
+            break;
+          case 'checkout':
+            setState(([curr, ...state]) => [ { name, timestamps: [...curr.timestamps, timestamp], locations: [...curr.locations, location] }, ...state ]);
+            break;
+        }
+      },
       () => {},
       { maximumAge: 0, enableHighAccuracy: true }
     );

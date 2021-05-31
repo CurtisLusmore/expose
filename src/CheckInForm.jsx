@@ -37,14 +37,14 @@ export default function CheckInForm({ addLocation }) {
 
   function checkIn(ev) {
     ev.preventDefault();
-    addLocation(state.name);
+    addLocation(state.name, 'checkin');
     setState(state => ({ ...state, mode: 'checkout' }));
     return false;
   }
 
   function checkOut(ev) {
     ev.preventDefault();
-    addLocation(state.name);
+    addLocation(state.name, 'checkout');
     setState(state => ({ ...state, name: '', mode: 'checkin' }));
     return false;
   }
