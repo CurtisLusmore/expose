@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function App() {
-  const initialStateString = window.localStorage.getItem('items');
+  const initialStateString = window.localStorage.getItem('expose_items');
   const initialState = initialStateString
     ? JSON.parse(initialStateString)
     : [];
@@ -22,7 +22,7 @@ function App() {
     if (typeof(newState) === 'function') {
       newState = newState(state);
     }
-    window.localStorage.setItem('items', JSON.stringify(newState));
+    window.localStorage.setItem('expose_items', JSON.stringify(newState));
     _setState(newState);
   }
 

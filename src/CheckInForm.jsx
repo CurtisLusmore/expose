@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function CheckInForm({ addLocation }) {
-  const initialStateString = window.localStorage.getItem('form');
+  const initialStateString = window.localStorage.getItem('expose_form');
   const initialState = initialStateString
     ? JSON.parse(initialStateString)
     : { name: '', mode: 'checkin' };
@@ -27,7 +27,7 @@ export default function CheckInForm({ addLocation }) {
     if (typeof(newState) === 'function') {
       newState = newState(state);
     }
-    window.localStorage.setItem('form', JSON.stringify(newState));
+    window.localStorage.setItem('expose_form', JSON.stringify(newState));
     _setState(newState);
   }
 
