@@ -1,6 +1,7 @@
 import React from 'react';
 import CheckInForm from './CheckInForm';
 import HistoryList from './HistoryList';
+import StateManagement from './StateManagement';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -51,6 +52,7 @@ function App() {
     <div className={classes.root}>
       <CheckInForm addLocation={addLocation} />
       <HistoryList history={state} />
+      <StateManagement />
     </div>
   );
 }
