@@ -21,11 +21,15 @@ const useStyles = makeStyles(theme => ({
 
 function CheckInEntry({ name, timestamps, locations }) {
   function timeString(timestamps) {
+    const time1 = moment(timestamps[0]).format('hh:mmA');
     if (timestamps.length === 1) {
-      return moment(timestamps[0]).format('hh:mmA');
+      return time1;
     }
     else {
-      return moment(timestamps[0]).format('hh:mmA') + ' - ' + moment(timestamps[1]).format('hh:mmA');
+      const time2 = moment(timestamps[0]).format('DD/MM/YYYY') === moment(timestamps[1]).format('DD/MM/YYYY')
+        ? moment(timestamps[1]).format('hh:mmA')
+        : moment(timestamps[1]).format('DD/MM/YYYY hh:mmA')
+      return `${time1} - ${time2}`;
     }
   }
 
@@ -49,13 +53,15 @@ function CheckInEntry({ name, timestamps, locations }) {
 };
 
 export default function HistoryList({ history }) {
-  const days = history.reduce(([prev, ...tail], curr) => {
+  const days = history.reduce((full, curr) => {
     const date = moment(curr.timestamps[0]).format('DD/MM/YYYY');
+    const prev = full[full.length-1];
+    const rest = full.slice(0, full.length-1);
     return prev === undefined
       ? [{ date, items: [curr] }]
       : prev.date !== date
-      ? [...tail, prev, { date, items: [curr] }]
-      : [...tail, { date, items: [...prev.items, curr] }];
+      ? [...full, { date, items: [curr] }]
+      : [...rest, { date, items: [...prev.items, curr] }];
   }, []);
 
   const classes = useStyles();
